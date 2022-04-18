@@ -1,0 +1,75 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: service-monitoring
+data:
+  prometheus.yml: |+
+    global:
+      scrape_interval:     15s
+      evaluation_interval: 30s
+      # scrape_timeout is set to the global default (10s).
+
+    # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+    rule_files:
+      # - "first_rules.yml"
+      # - "second_rules.yml"
+
+    scrape_configs:
+      - job_name: 'service-monitoring'
+        scrape_interval: 5s
+        scheme: http
+        static_configs:
+          - targets: ['127.0.0.1:8080', 'localhost:9090', 'host.docker.internal:8080']
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-deployment
+  labels:
+    app: prometheus-deployment
+  namespace: service-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-deployment
+  template:
+    metadata:
+      labels:
+        app: prometheus-deployment
+    spec:
+      containers:
+      - name: prometheus-deployment
+        image: prom/prometheus:latest
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/prometheus/prometheus.yml
+          readOnly: true
+        ports:
+        - port: 9090
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9090
+          initialDelaySeconds: 3
+          periodSeconds: 5
+      volumes:
+      - name: config-volume
+        configMap:
+          name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-service
+  namespace: service-monitoring
+spec:
+  type: ClusterIP
+  selector:
+    app: prometheus-deployment
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
