@@ -39,13 +39,17 @@ Go Application to expose custom metrics that checks the status of external urls 
 
 
 ## Build and Deploy on desktop
+
+`$ git clone https://github.com/lambdafunc/vmw.git`
+from root directory run: `$ go mod tidy`
 ```
-git clone https://github.com/lambdafunc/vmw.git
-from root directory run: $ go mod tidy
-$ cd go_mon && go run main.go collector.go
+$ go test .
+ok  	go_mon/go_mon	1.182s
+```
+`$ cd go_mon && go run main.go collector.go`
 Service should start and listening on port 8080
 image-1
-```
+
 
 ### Build container image for go_mon
 
@@ -67,6 +71,19 @@ Grafana will be up and running on localhost:3000
 
 - Run Go-Mon
 `$ docker run -d -p 8080:8080 go_mon`
+
+Below is sample run for `metrics` endpoint to verify if metrics are being populated.
+```
+$ curl localhost:8080/metrics
+
+# TYPE sample_external_url_response_ms counter
+sample_external_url_response_ms{url="https://httpstat.us/200"} 435
+sample_external_url_response_ms{url="https://httpstat.us/503"} 435
+# HELP sample_external_url_up shows if url is up
+# TYPE sample_external_url_up counter
+sample_external_url_up{url="https://httpstat.us/200"} 1
+sample_external_url_up{url="https://httpstat.us/503"} 0
+```
 
 URL's
 ```
