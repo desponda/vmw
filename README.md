@@ -1,6 +1,8 @@
+## Service monitoring: Go-Mon
+
+An application written in Golang to expose custom metrics that checks the status of external urls and capture the response time in miliseconds with output in prometheus format e.g. sample_external_url_up{url="https://httpstat.us/503"} 0
 
 * [Requirements](#requirements)
-* [Go-Mon](#go-mon)
 * [Prerequisite](#prerequisite)
 * [Build and Deploy on local dev setup](#build-and-deploy-on-local-dev-setup)
     * [Local dev setup and test](#local-dev-setup-and-test)
@@ -25,10 +27,6 @@
     sample_external_url_response_ms{url="https://httpstat.us/200 "}  = [value]
     ```
 
-
-## Service monitoring: Go-Mon
-
-Go Application to expose custom metrics that checks the status of external urls and capture the response time in miliseconds with output in prometheus format e.g. sample_external_url_up{url="https://httpstat.us/503"} 0
 
 ### Prerequisite
 - Go 1.15 or above workspace with GO PATH configured.
