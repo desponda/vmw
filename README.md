@@ -62,6 +62,8 @@ Run from the root directory
 
 `$ docker build -t go-mon .`
 
+![docker build](https://github.com/lambdafunc/vmw/blob/main/images/docker_build_gomon.png?raw=true)
+
 ### Run Prometheus and Grafana
 
 ```sh
@@ -77,6 +79,7 @@ $ docker run -d -p 3000:3000 grafana/grafana grafana
 
 Grafana will be up and running on localhost:3000
 ```
+![Grafana Build](https://github.com/lambdafunc/vmw/blob/main/images/docker_grafana.png?raw=true)
 
 ### Run Golang app
 
@@ -108,6 +111,8 @@ Grafana: http://localhost:3000/
 `$ chmod +x scripts/generateResponseData.sh`
 
 `./scripts/generateResponseData` to generate some metrics
+
+![testdata](https://github.com/lambdafunc/vmw/blob/main/images/metrics_browser.png?raw=true)
 
 
 ## Deployment on Kubernetes:
